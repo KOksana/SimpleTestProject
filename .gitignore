@@ -1,0 +1,19 @@
+################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+TestResults/
+.vs/
+Bin/
+packages/
+obj/
+*.feature.cs
+UpgradeLog.htm
+UpgradeLog2.htm
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+/BinChromeDriver.log
