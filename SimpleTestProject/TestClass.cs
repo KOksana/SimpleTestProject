@@ -12,17 +12,12 @@ namespace SimpleTestProject
     {
         private static IWebDriver _driver;
         private const string URL = "https://www.google.com/";
-
         private const string SEARCH_FIELD_XPATH = "//input[@class = 'gLFyf gsfi']";
         private const string SEARCH_FIELD_CSS = "input[class = 'gLFyf gsfi']";
-
         private const string SEARCH_BUTTON_XPATH = "//div[@class = 'VlcLAe']//input[@class = 'gNO89b']";
         private const string SEARCH_BUTTON_CSS = "div[class = 'VlcLAe'] input[class = 'gNO89b']";
-
         private const string WIKI_RESULT_XPATH = "//h3[text()='XPath - Wikipedia']/..";
         private const string WIKI_RESULT_CSS = "div[class = 'r'] a[href $= 'wiki/XPath']";
-
-        private const string CONTEXT_LIST_XPATH = "//div[@id= 'toc']/ul//a";
         private const string CONTEXT_LIST_CSS = "div[id= 'toc']>ul a";
 
         [ClassInitialize]
@@ -56,7 +51,7 @@ namespace SimpleTestProject
             _driver.FindElement(By.CssSelector(SEARCH_FIELD_CSS)).SendKeys("xpath");
 
             var searchButton = _driver.FindElement(By.CssSelector(SEARCH_BUTTON_CSS));
-            Actions actions = new Actions(_driver);
+            var actions = new Actions(_driver);
             actions.MoveToElement(searchButton).Perform();
 
             _driver.FindElement(By.XPath(SEARCH_BUTTON_XPATH)).Click();
@@ -67,10 +62,9 @@ namespace SimpleTestProject
 
             wait.Until(drv => drv.FindElement(By.ClassName("toctitle")));
 
-            //var allContextElements = _driver.FindElements(By.XPath(CONTEXT_LIST_XPATH));
             var allContextElements = _driver.FindElements(By.CssSelector(CONTEXT_LIST_CSS));
 
-            int contextListLength = allContextElements.Count;
+            var contextListLength = allContextElements.Count;
             Assert.IsTrue(contextListLength == 36, $"Number of elements in context should be 36, but it is {contextListLength}");
         }
     }
