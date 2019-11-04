@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
@@ -7,10 +7,10 @@ using System;
 
 namespace SimpleTestProject
 {
-    [TestFixture]
+    [TestClass]
     public class TestClass
     {
-        private IWebDriver _driver;
+        private static IWebDriver _driver;
         private const string URL = "https://www.google.com/";
 
         private const string SEARCH_FIELD_XPATH = "//input[@class = 'gLFyf gsfi']";
@@ -25,22 +25,32 @@ namespace SimpleTestProject
         private const string CONTEXT_LIST_XPATH = "//div[@id= 'toc']/ul//a";
         private const string CONTEXT_LIST_CSS = "div[id= 'toc']>ul a";
 
-        [OneTimeSetUp]
-        public void Setup()
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext context)
         {
-            ChromeOptions options = new ChromeOptions();
+            Console.WriteLine("ClassInitialize");
+
+            var options = new ChromeOptions();
             options.AddArguments("--lang=en-GB");
 
             _driver = new ChromeDriver(options);
             _driver.Manage().Window.Maximize();
         }
 
-        [Test]
+        [ClassCleanup]
+        public static void ClassCleanup()
+        {
+            Console.WriteLine("ClassCleanup");
+
+            _driver.Quit();
+        }
+
+        [TestMethod]
         public void Test()
         {
             _driver.Navigate().GoToUrl(URL);
 
-            WebDriverWait wait = new WebDriverWait(_driver, new TimeSpan(0, 0, 5));
+            var wait = new WebDriverWait(_driver, new TimeSpan(0, 0, 5));
             wait.Until(drv => drv.FindElement(By.XPath(SEARCH_FIELD_XPATH)));
 
             _driver.FindElement(By.CssSelector(SEARCH_FIELD_CSS)).SendKeys("xpath");
@@ -57,17 +67,11 @@ namespace SimpleTestProject
 
             wait.Until(drv => drv.FindElement(By.ClassName("toctitle")));
 
-            // var allContextElements = _driver.FindElements(By.XPath(CONTEXT_LIST_XPATH));
+            //var allContextElements = _driver.FindElements(By.XPath(CONTEXT_LIST_XPATH));
             var allContextElements = _driver.FindElements(By.CssSelector(CONTEXT_LIST_CSS));
 
             int contextListLength = allContextElements.Count;
             Assert.IsTrue(contextListLength == 36, $"Number of elements in context should be 36, but it is {contextListLength}");
-        }
-
-        [OneTimeTearDown]
-        public void TearDown()
-        {
-            _driver.Quit();
         }
     }
 }
