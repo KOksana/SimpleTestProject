@@ -1,9 +1,9 @@
-﻿using OpenQA.Selenium;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace SimpleTestProject
 {
@@ -44,6 +44,8 @@ namespace SimpleTestProject
             wait.Until(drv => drv.FindElement(By.XPath(SEARCH_FIELD_XPATH)));
 
             _driver.FindElement(By.CssSelector(SEARCH_FIELD_CSS)).SendKeys("xpath");
+
+            wait.Until(d => _driver.FindElement(By.CssSelector(SEARCH_BUTTON_CSS)).Displayed);
 
             var searchButton = _driver.FindElement(By.CssSelector(SEARCH_BUTTON_CSS));
             Actions actions = new Actions(_driver);

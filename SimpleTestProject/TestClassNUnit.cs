@@ -45,9 +45,11 @@ namespace SimpleTestProject
 
             _driver.FindElement(By.CssSelector(SEARCH_FIELD_CSS)).SendKeys("xpath");
 
+            wait.Until(d => _driver.FindElement(By.CssSelector(SEARCH_BUTTON_CSS)).Displayed);
+
             var searchButton = _driver.FindElement(By.CssSelector(SEARCH_BUTTON_CSS));
             var actions = new Actions(_driver);
-            actions.MoveToElement(searchButton).Perform();
+            actions.MoveToElement(searchButton).Build().Perform();
 
             _driver.FindElement(By.XPath(SEARCH_BUTTON_XPATH)).Click();
 
